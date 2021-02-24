@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:great_places/providers/great_places.dart';
 import 'package:great_places/widgets/image_input.dart';
+import 'package:great_places/widgets/location_input.dart';
 import 'package:provider/provider.dart';
 
 class PlaceFormScreen extends StatefulWidget {
@@ -13,14 +15,25 @@ class PlaceFormScreen extends StatefulWidget {
 class _PlaceFormScreenState extends State<PlaceFormScreen> {
   final _titleController = TextEditingController();
   File _pickedImage;
+  LatLng _pickedPosition;
 
   void _selectImage(File pickedImage) {
-    _pickedImage = pickedImage;
+    setState(() {
+      _pickedImage = pickedImage;
+    });
+  }
+
+  void _selectPosition(LatLng position) {
+    setState(() {
+      _pickedPosition = position;
+    });
   }
 
   void _submitForm() {
     // Check se é valido
-    if (_titleController.text.isEmpty || _pickedImage == null) {
+    if (_titleController.text.isEmpty ||
+        _pickedImage == null ||
+        _pickedPosition == null) {
       return;
     }
 
@@ -28,6 +41,7 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
     Provider.of<GreatPlaces>(context, listen: false).addPlace(
       _titleController.text,
       _pickedImage,
+      _pickedPosition,
     );
 
     // Retorna
@@ -52,11 +66,16 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
                     TextField(
                       controller: _titleController,
                       decoration: InputDecoration(
-                        labelText: 'Título',
+                        labelText: 'Descrição',
                       ),
+                      onChanged: (text) {
+                        setState(() {});
+                      },
                     ),
                     SizedBox(height: 10),
                     ImageInput(this._selectImage),
+                    SizedBox(height: 10),
+                    LocationInput(this._selectPosition),
                   ],
                 ),
               ),

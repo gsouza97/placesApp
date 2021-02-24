@@ -57,7 +57,7 @@ class _ImageInputState extends State<ImageInput> {
                   width: double.infinity,
                   fit: BoxFit.cover,
                 )
-              : Text('Nenhuma imagem!'),
+              : Text('Imagem não adicionada'),
         ),
         SizedBox(width: 10),
         Expanded(
